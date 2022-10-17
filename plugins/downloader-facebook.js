@@ -1,12 +1,17 @@
-import { facebookdl, facebookdlv2 } from '@bochilteam/scraper'
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-    if (!args[0]) throw `Use example ${usedPrefix}${command} https://fb.watch/azFEBmFRcy/`
-    const { result } = await facebookdl(args[0]).catch(async _ => await facebookdlv2(args[0]))
-    for (const { url, isVideo } of result.reverse()) conn.sendFile(m.chat, url, `facebook.${!isVideo ? 'bin' : 'mp4'}`, `🔗 *Url:* ${url}`, m)
+let xfar = require('xfarr-api')
+let fetch = require('node-fetch')
+let handler = async (m, { conn, command, text }) => {
+    if (!text) throw 'Masukkan Link\n\nContoh: .fb https://facebook.com/xxxxxx'
+  let res = await xfar.Facebook(text)
+m.reply('*Tunggu Sebentar...*')
+conn.sendFile(m.chat,res.medias[1].url, 'fb.mp4', `Tittle: ${res.tittle}
+Link Video: ${res.url}
+`, m)
+
 }
-handler.help = ['facebook'].map(v => v + ' <url>')
+handler.help = ['fb <url>', 'facebook <url>']
 handler.tags = ['downloader']
+handler.command = /^fb|facebook$/i
 
-handler.command = /^((facebook|fb)(downloder|dl)?)$/i
 
-export default handler
+module.exports = handler
